@@ -45,6 +45,7 @@ import net.zeeraa.novacore.spigot.module.modules.multiverse.WorldUnloadOption;
 import net.zeeraa.novacore.spigot.tasks.SimpleTask;
 import net.zeeraa.novacore.spigot.utils.VectorArea;
 import se.gameffect.gameffectmccreativeevent.command.ResetInstanceCommand;
+import se.gameffect.gameffectmccreativeevent.command.ResetPublicInstanceCommand;
 
 public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 	public static final String PUBLIC_INSTANCE_NAME = "shared_instance";
@@ -133,7 +134,7 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 						}
 					} else {
 						if (!inPortal.contains(player)) {
-							Log.trace(player.getName() + " is in portal type" + type.name());
+							Log.trace(player.getName() + " is in portal type " + type.name());
 
 							inPortal.add(player);
 
@@ -166,6 +167,7 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 
 		try {
 			CommandRegistry.registerCommand(ResetInstanceCommand.class);
+			CommandRegistry.registerCommand(ResetPublicInstanceCommand.class);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			Log.error("Failed to register commands");
 			e.printStackTrace();
@@ -214,7 +216,7 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 		if (worlds.containsKey(name.toLowerCase())) {
 			MultiverseWorld world = worlds.get(name.toLowerCase());
 			world.getWorld().getPlayers().forEach(player -> {
-				player.sendMessage("Världen återställs. Vänligen vänta...");
+				player.sendMessage(ChatColor.AQUA + "Världen återställs. Vänligen vänta...");
 				tpToSpawn(player);
 			});
 			Log.info("Unloading world " + world.getWorld().getName());

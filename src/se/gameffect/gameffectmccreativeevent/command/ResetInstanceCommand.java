@@ -11,6 +11,8 @@ import se.gameffect.gameffectmccreativeevent.GameffectCreativeEvent;
 public class ResetInstanceCommand extends NovaCommand {
 	public ResetInstanceCommand() {
 		super("resetinstance", GameffectCreativeEvent.getInstance());
+		
+		setAliases(NovaCommand.generateAliasList("reset"));
 
 		setAllowedSenders(AllowedSenders.PLAYERS);
 		setRequireOp(false);
