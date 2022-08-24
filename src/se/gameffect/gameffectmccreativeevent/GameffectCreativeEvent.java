@@ -34,6 +34,7 @@ import net.zeeraa.novacore.commons.tasks.Task;
 import net.zeeraa.novacore.commons.utils.Callback;
 import net.zeeraa.novacore.commons.utils.JSONFileType;
 import net.zeeraa.novacore.commons.utils.JSONFileUtils;
+import net.zeeraa.novacore.spigot.NovaCore;
 import net.zeeraa.novacore.spigot.abstraction.VersionIndependentUtils;
 import net.zeeraa.novacore.spigot.command.CommandRegistry;
 import net.zeeraa.novacore.spigot.module.ModuleManager;
@@ -46,6 +47,7 @@ import net.zeeraa.novacore.spigot.tasks.SimpleTask;
 import net.zeeraa.novacore.spigot.utils.VectorArea;
 import se.gameffect.gameffectmccreativeevent.command.ResetInstanceCommand;
 import se.gameffect.gameffectmccreativeevent.command.ResetPublicInstanceCommand;
+import se.gameffect.gameffectmccreativeevent.utils.GameffectUtils;
 
 public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 	public static final String PUBLIC_INSTANCE_NAME = "shared_instance";
@@ -111,6 +113,8 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 		ModuleManager.require(MultiverseManager.class);
 
 		task = new SimpleTask(this, () -> {
+			double[] recentTps = NovaCore.getInstance().getVersionIndependentUtils().getRecentTps();
+
 			Bukkit.getServer().getOnlinePlayers().forEach(player -> {
 				if (player.getWorld().equals(Bukkit.getServer().getWorlds().stream().findFirst().get())) {
 					if (player.getGameMode() != GameMode.ADVENTURE) {
@@ -156,6 +160,9 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 						}
 					}
 				}
+
+				int ping = NovaCore.getInstance().getVersionIndependentUtils().getPlayerPing(player);
+				VersionIndependentUtils.get().sendTabList(player, ChatColor.GOLD + "Gameffect Minecraft Event\n\n", ChatColor.GOLD + "\n\nEventet hålls av Gameffect https://gameffect.se/\n\n" + GameffectUtils.formatTPS(recentTps[0]) + " " + GameffectUtils.formatPing(ping));
 			});
 		}, 2L);
 		Task.tryStartTask(task);
@@ -199,7 +206,6 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
 		tpToSpawn(player);
-		VersionIndependentUtils.get().sendTabList(player, ChatColor.GOLD + "Gameffect Minecraft Event", "");
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
