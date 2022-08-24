@@ -1,0 +1,5 @@
+name: GameffectCreativeEvent
+main: se.gameffect.gameffectmccreativeevent.GameffectCreativeEvent
+description: Gameffect Event
+version: 1.0
+depend: [NovaCore]
