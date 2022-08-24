@@ -19,9 +19,9 @@ public class ResetPublicInstanceCommand extends NovaCommand {
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 
 		if (GameffectCreativeEvent.getInstance().getWorlds().containsKey(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
-			GameffectCreativeEvent.getInstance().setupWorld(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME, true, true, () -> Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Public instance has been resetted"));
+			GameffectCreativeEvent.getInstance().setupWorld(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME, true, true, () -> Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Public world has been resetted"));
 		} else {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Public instance not loaded");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Public world not loaded");
 		}
 		return true;
 	}

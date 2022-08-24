@@ -23,9 +23,9 @@ public class ResetInstanceCommand extends NovaCommand {
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		Player player = (Player) sender;
 		if (GameffectCreativeEvent.getInstance().getWorlds().containsKey(player.getName().toLowerCase())) {
-			GameffectCreativeEvent.getInstance().setupWorld(player.getName().toLowerCase(), false, true, () -> player.sendMessage(ChatColor.GREEN + "Din privata instans har återställts"));
+			GameffectCreativeEvent.getInstance().setupWorld(player.getName().toLowerCase(), false, true, () -> player.sendMessage(ChatColor.GREEN + "Din privata värld har återställts"));
 		} else {
-			player.sendMessage(ChatColor.RED + "Du har ingen aktiv instans att återställa");
+			player.sendMessage(ChatColor.RED + "Du har ingen aktiv värld att återställa");
 		}
 		return true;
 	}

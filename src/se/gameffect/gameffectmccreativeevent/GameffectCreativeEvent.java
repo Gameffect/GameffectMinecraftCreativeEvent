@@ -142,10 +142,10 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 							if (worlds.containsKey(instance)) {
 								player.teleport(worlds.get(instance).getWorld().getSpawnLocation());
 								if (type == PortalType.PRIVATE) {
-									player.sendMessage(ChatColor.GREEN + "För att återställa din privata instans kör kommandot " + ChatColor.AQUA + "/reset");
+									player.sendMessage(ChatColor.GREEN + "För att återställa din privata värld kör kommandot " + ChatColor.AQUA + "/reset");
 								}
 							} else {
-								player.sendMessage(ChatColor.RED + "Instansen är inte redo ännu. Vänligen vänta några sekunder och testa igen. Om felet fortsätter att uppstå kontakta personalen och visa dem detta meddelande. Error code: ERR:WORLD_NOT_LOADED");
+								player.sendMessage(ChatColor.RED + "Världen är inte redo ännu. Vänligen vänta några sekunder och testa igen. Om felet fortsätter att uppstå kontakta personalen och visa dem detta meddelande. Error code: ERR:WORLD_NOT_LOADED");
 							}
 						}
 					}
@@ -173,24 +173,24 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void onDisable() {
 		Task.tryStopTask(task);
 		Bukkit.getScheduler().cancelTasks(this);
 		HandlerList.unregisterAll((Plugin) this);
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent e) {
-		if(e.getEntity().getWorld().getName().equalsIgnoreCase(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
+		if (e.getEntity().getWorld().getName().equalsIgnoreCase(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
 			e.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockExplode(BlockExplodeEvent e) {
-		if(e.getBlock().getWorld().getName().equalsIgnoreCase(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
+		if (e.getBlock().getWorld().getName().equalsIgnoreCase(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
 			e.setCancelled(true);
 		}
 	}
