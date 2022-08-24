@@ -19,6 +19,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
@@ -139,7 +141,7 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 							if (worlds.containsKey(instance)) {
 								player.teleport(worlds.get(instance).getWorld().getSpawnLocation());
 								if (type == PortalType.PRIVATE) {
-									player.sendMessage(ChatColor.GREEN + "For att återställa din privata instans kör kommandot " + ChatColor.AQUA + "/reset");
+									player.sendMessage(ChatColor.GREEN + "För att återställa din privata instans kör kommandot " + ChatColor.AQUA + "/reset");
 								}
 							} else {
 								player.sendMessage(ChatColor.RED + "Instansen är inte redo ännu. Vänligen vänta några sekunder och testa igen. Om felet fortsätter att uppstå kontakta personalen och visa dem detta meddelande. Error code: ERR:WORLD_NOT_LOADED");
@@ -169,12 +171,26 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public void onDisable() {
 		Task.tryStopTask(task);
 		Bukkit.getScheduler().cancelTasks(this);
 		HandlerList.unregisterAll((Plugin) this);
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityExplode(EntityExplodeEvent e) {
+		if(e.getEntity().getWorld().getName().equalsIgnoreCase(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
+			e.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockExplode(BlockExplodeEvent e) {
+		if(e.getBlock().getWorld().getName().equalsIgnoreCase(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
+			e.setCancelled(true);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -205,7 +221,7 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 			MultiverseManager.getInstance().unload(world);
 		}
 
-		final String worldName = persistent ? name + "_p" : name.toLowerCase() + "_" + UUID.randomUUID().toString().substring(0, 8);
+		final String worldName = persistent ? name : name.toLowerCase() + "_" + UUID.randomUUID().toString().substring(0, 8);
 
 		File targetFile = new File(Bukkit.getServer().getWorldContainer().getAbsolutePath() + File.separator + worldName);
 
