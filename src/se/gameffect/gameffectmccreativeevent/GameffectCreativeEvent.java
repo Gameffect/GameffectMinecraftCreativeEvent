@@ -66,6 +66,9 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 
 	private List<Player> inPortal;
 
+	private String tabHeader;
+	private String tabFooter;
+
 	public static GameffectCreativeEvent getInstance() {
 		return instance;
 	}
@@ -104,6 +107,11 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 
 			publicPortal = VectorArea.fromJSON(config.getJSONObject("public_portal"));
 			privatePortal = VectorArea.fromJSON(config.getJSONObject("private_portal"));
+
+			JSONObject tab = config.getJSONObject("tab");
+
+			tabHeader = ChatColor.translateAlternateColorCodes('§', tab.getString("header"));
+			tabFooter = ChatColor.translateAlternateColorCodes('§', tab.getString("footer"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -162,7 +170,7 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 				}
 
 				int ping = NovaCore.getInstance().getVersionIndependentUtils().getPlayerPing(player);
-				VersionIndependentUtils.get().sendTabList(player, ChatColor.GOLD + "Gameffect Minecraft Event\n\n", ChatColor.GOLD + "\n\nEventet hålls av Gameffect https://gameffect.se/\n\n" + GameffectUtils.formatTPS(recentTps[0]) + " " + GameffectUtils.formatPing(ping));
+				VersionIndependentUtils.get().sendTabList(player, tabHeader, tabFooter + "\n\n" + GameffectUtils.formatTPS(recentTps[0]) + " " + GameffectUtils.formatPing(ping));
 			});
 		}, 2L);
 		Task.tryStartTask(task);
