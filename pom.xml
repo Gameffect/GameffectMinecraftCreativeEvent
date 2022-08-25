@@ -9,7 +9,7 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<maven-compiler-plugin-version>3.8.0</maven-compiler-plugin-version>
@@ -29,8 +29,8 @@
 			<url>https://nexus2.novauniverse.net/repository/craftbukkit/</url>
 		</repository>
 	</distributionManagement>
-	
-		<build>
+
+	<build>
 		<resources>
 			<resource>
 				<targetPath>.</targetPath>
@@ -113,9 +113,14 @@
 
 	<repositories>
 		<repository>
-            <id>novauniverse2</id>
-            <url>https://nexus2.novauniverse.net/repository/craftbukkit/</url>
-        </repository>
+			<id>novauniverse2</id>
+			<url>https://nexus2.novauniverse.net/repository/craftbukkit/</url>
+		</repository>
+
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -123,7 +128,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.16.5-R0.1-SNAPSHOT</version>
+			<version>1.19.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
