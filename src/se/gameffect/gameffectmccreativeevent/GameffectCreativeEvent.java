@@ -45,6 +45,7 @@ import net.zeeraa.novacore.spigot.module.modules.multiverse.WorldOptions;
 import net.zeeraa.novacore.spigot.module.modules.multiverse.WorldUnloadOption;
 import net.zeeraa.novacore.spigot.tasks.SimpleTask;
 import net.zeeraa.novacore.spigot.utils.VectorArea;
+import se.gameffect.gameffectmccreativeevent.command.HubCommand;
 import se.gameffect.gameffectmccreativeevent.command.ResetInstanceCommand;
 import se.gameffect.gameffectmccreativeevent.command.ResetPublicInstanceCommand;
 import se.gameffect.gameffectmccreativeevent.utils.GameffectUtils;
@@ -183,6 +184,7 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 		try {
 			CommandRegistry.registerCommand(ResetInstanceCommand.class);
 			CommandRegistry.registerCommand(ResetPublicInstanceCommand.class);
+			CommandRegistry.registerCommand(HubCommand.class);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			Log.error("Failed to register commands");
 			e.printStackTrace();
