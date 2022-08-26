@@ -22,11 +22,11 @@
 	<distributionManagement>
 		<snapshotRepository>
 			<id>novauniverse2-snapshot</id>
-			<url>https://nexus2.novauniverse.net/repository/craftbukkit/</url>
+			<url>https://nexus.novauniverse.net/repository/novauniverse/</url>
 		</snapshotRepository>
 		<repository>
 			<id>novauniverse2</id>
-			<url>https://nexus2.novauniverse.net/repository/craftbukkit/</url>
+			<url>https://nexus.novauniverse.net/repository/novauniverse/</url>
 		</repository>
 	</distributionManagement>
 
