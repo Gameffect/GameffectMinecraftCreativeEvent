@@ -14,7 +14,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wither;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -64,8 +70,11 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 	private VectorArea privatePortal;
 
 	private Task task;
+	private Task entityRemovalTask;
 
 	private List<Player> inPortal;
+
+	private Map<Player, BossBar> bossBars;
 
 	private String tabHeader;
 	private String tabFooter;
@@ -86,7 +95,9 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 
 		usernames = new ArrayList<String>();
 		inPortal = new ArrayList<Player>();
+
 		worlds = new HashMap<String, MultiverseWorld>();
+		bossBars = new HashMap<Player, BossBar>();
 
 		templateWorld = new File(getDataFolder().getAbsoluteFile() + File.separator + "world");
 		File configFile = new File(getDataFolder().getAbsolutePath() + File.separator + "config.json");
@@ -121,8 +132,24 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 
 		ModuleManager.require(MultiverseManager.class);
 
+		entityRemovalTask = new SimpleTask(this, () -> {
+			if (worlds.containsKey(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
+				worlds.get(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME).getWorld().getEntitiesByClasses(EnderDragon.class, Wither.class, WitherSkull.class).forEach(e -> e.remove());
+			}
+		}, 1L);
+
 		task = new SimpleTask(this, () -> {
 			double[] recentTps = NovaCore.getInstance().getVersionIndependentUtils().getRecentTps();
+
+			bossBars.forEach((player, bar) -> {
+				if (player.getWorld().getName().equalsIgnoreCase("lobby")) {
+					bar.setTitle(ChatColor.GOLD + "" + ChatColor.BOLD + "Lobby");
+				} else if (player.getWorld().getName().equalsIgnoreCase(GameffectCreativeEvent.PUBLIC_INSTANCE_NAME)) {
+					bar.setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Delad värld");
+				} else {
+					bar.setTitle(ChatColor.AQUA + "" + ChatColor.BOLD + "Privat värld");
+				}
+			});
 
 			Bukkit.getServer().getOnlinePlayers().forEach(player -> {
 				if (player.getWorld().equals(Bukkit.getServer().getWorlds().stream().findFirst().get())) {
@@ -174,6 +201,8 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 				VersionIndependentUtils.get().sendTabList(player, tabHeader, tabFooter + "\n\n" + GameffectUtils.formatTPS(recentTps[0]) + " " + GameffectUtils.formatPing(ping));
 			});
 		}, 2L);
+
+		Task.tryStartTask(entityRemovalTask);
 		Task.tryStartTask(task);
 
 		Bukkit.getServer().getWorlds().stream().findFirst().get().setDifficulty(Difficulty.PEACEFUL);
@@ -193,7 +222,9 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 
 	@Override
 	public void onDisable() {
+		Task.tryStopTask(entityRemovalTask);
 		Task.tryStopTask(task);
+
 		Bukkit.getScheduler().cancelTasks(this);
 		HandlerList.unregisterAll((Plugin) this);
 	}
@@ -215,12 +246,21 @@ public class GameffectCreativeEvent extends JavaPlugin implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
+
+		BossBar bar = Bukkit.createBossBar(ChatColor.GOLD + "Gameffect", BarColor.BLUE, BarStyle.SOLID);
+		bar.setVisible(true);
+		bar.addPlayer(player);
+		bossBars.put(player, bar);
+
 		tpToSpawn(player);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerQuit(PlayerQuitEvent e) {
-		inPortal.remove(e.getPlayer());
+		Player player = e.getPlayer();
+		bossBars.get(player).removeAll();
+		bossBars.remove(player);
+		inPortal.remove(player);
 	}
 
 	public void tpToSpawn(Player player) {
